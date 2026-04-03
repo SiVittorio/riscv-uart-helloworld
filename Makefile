@@ -7,13 +7,13 @@ OBJDUMP = $(PREF)objdump
 
 CFLAGS := -nostartfiles -march=rv64imafdc -mabi=lp64d -Wall -O0
 
-LINKER_SCRIPT := ../../tests/env_comp_cva6/cva6SDRAM.ld
+LINKER_SCRIPT := ../sdram-new.ld
 SRC := main
 
-build/cva6-$(SRC).hex: build/$(SRC).hex
+build/sdram-$(SRC).hex: build/$(SRC).hex
 	cd build && \
 	$(OBJCOPY) -I ihex -O binary $(SRC).hex $(SRC).bin && \
-		hexdump -v -e '"%08x\n"' $(SRC).bin > cva6-$(SRC).hex
+		hexdump -v -e '"%08x\n"' $(SRC).bin > sdram-$(SRC).hex
 
 build/$(SRC).hex: build/$(SRC).elf
 	cd build && \
