@@ -7,7 +7,8 @@ OBJDUMP = $(PREF)objdump
 
 CFLAGS := -nostartfiles -march=rv64imafdc -mabi=lp64d -Wall -O0
 
-LINKER_SCRIPT := ../sdram-new.ld
+LINKER_SCRIPT := ../sdram.ld
+STARTUP_ASM   := ../startup.S
 SRC := main
 
 build/sdram-$(SRC).hex: build/$(SRC).hex
@@ -22,7 +23,7 @@ build/$(SRC).hex: build/$(SRC).elf
 
 build/$(SRC).elf: build/$(SRC).o
 	cd build && \
-	$(CC) $(CFLAGS) -T $(LINKER_SCRIPT) $(SRC).o -o $(SRC).elf
+	$(CC) $(CFLAGS) -T $(LINKER_SCRIPT) $(SRC).o $(STARTUP_ASM) -o $(SRC).elf
 
 build/$(SRC).o: build
 	$(CC) $(CFLAGS) -c $(SRC).c -o ./build/$(SRC).o
