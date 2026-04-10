@@ -16,19 +16,9 @@ void main(){
     *(&UART_L0+8) = 0x07;  // 1b threshold
     *(&UART_L0+16) = 0x20; // Autoflow
 
-    // Cant use rodata secton in ld-script
-    // FIXME
-    UART_L0 = 'H';
-    UART_L0 = 'e';
-    UART_L0 = 'l';
-    UART_L0 = 'l';
-    UART_L0 = 'o';
-    UART_L0 = ' ';
-    UART_L0 = 'w';
-    UART_L0 = 'o';
-    UART_L0 = 'r';
-    UART_L0 = 'l';
-    UART_L0 = 'd';
-    UART_L0 = '!';
-    
+    const char * s = "Hello World!\r\n";
+    while(*s) {
+        UART_L0 = *s;
+        s++;
+    }
 }
