@@ -4,7 +4,7 @@ CC      = $(PREF)gcc
 OBJCOPY = $(PREF)objcopy
 OBJDUMP = $(PREF)objdump
 
-CFLAGS := -nostartfiles -march=rv64imafdc -mabi=lp64d -Wall -O0
+CFLAGS := -g -nostartfiles -march=rv64imafdc -mabi=lp64d -Wall -O0
 
 LINKER_SCRIPT := ../sdram.ld
 STARTUP_ASM   := ../startup.S
@@ -20,12 +20,15 @@ build/$(SRC).hex: build/$(SRC).elf
 	$(OBJCOPY) $(SRC).elf -O ihex $(SRC).hex && \
 	$(OBJDUMP)  -D -h -S  $(SRC).elf > $(SRC).dump
 
-build/$(SRC).elf: build/$(SRC).o
+build/$(SRC).elf: build/$(SRC).o build/startup.o
 	cd build && \
-	$(CC) $(CFLAGS) -T $(LINKER_SCRIPT) $(SRC).o $(STARTUP_ASM) -o $(SRC).elf
+	$(CC) $(CFLAGS) -T $(LINKER_SCRIPT) $(SRC).o startup.o -o $(SRC).elf
 
 build/$(SRC).o: build
 	$(CC) $(CFLAGS) -c $(SRC).c -o ./build/$(SRC).o
+
+build/startup.o: build startup.S
+	$(CC) $(CFLAGS) -c startup.S -o ./build/startup.o
 
 build:
 	mkdir -p build

@@ -6,33 +6,6 @@
 // Christopher Reinwardt <creinwar@student.ethz.ch>
 // Paul Scheffler <paulsc@iis.ee.ethz.ch>
 
-
-    // functions for interrupts handle
-    .weak irq_handler
-    .weak uart0_irq_handler
-    .weak uart1_irq_handler
-    .weak uart_l0_irq_handler
-    .weak uart_l1_irq_handler
-    .weak spi0_irq_handler
-    .weak spi1_irq_handler
-    .weak spi_l0_irq_handler
-    .weak spi_l1_irq_handler
-    .weak gpio_irq_handler
-    .weak dma0_irq_handler
-    .weak dma1_irq_handler
-    .weak ethernet_irq_handler
-    .weak i2s_rx_irq_handler
-    .weak i2s_tx_irq_handler
-    .weak i2c_irq_handler
-    .weak ps2_0_irq_handler
-    .weak ps2_1_irq_handler
-    .weak gpt_0_irq_handler
-    .weak gpt_1_irq_handler
-    .weak gpt_2_irq_handler
-    .weak gpt_3_irq_handler
-    .weak load_access_fault_handler
-    .weak store_access_fault_handler
-
 .section .text._start
 
 // Minimal CRT0
@@ -67,10 +40,6 @@ _start:
     sd gp, 8(sp)
     sd ra, 16(sp)
 
-    // Set trap vector
-    la t0, _trap_handler_wrap
-    csrrw x0, mtvec, t0
-
     // Zero the .bss section
     la t0, __bss_start      // t0 = bss start address
     la t1, __bss_end        // t1 = bss end address
@@ -102,40 +71,6 @@ _fp_init:
     slli t1, t1, 13
     csrs mstatus, t1
 
-    // Clear all 32 double FP registers
-    fcvt.d.l f0, x0
-    fmv.d f1, f0
-    fmv.d f2, f0
-    fmv.d f3, f0
-    fmv.d f4, f0
-    fmv.d f5, f0
-    fmv.d f6, f0
-    fmv.d f7, f0
-    fmv.d f8, f0
-    fmv.d f9, f0
-    fmv.d f10, f0
-    fmv.d f11, f0
-    fmv.d f12, f0
-    fmv.d f13, f0
-    fmv.d f14, f0
-    fmv.d f15, f0
-    fmv.d f16, f0
-    fmv.d f17, f0
-    fmv.d f18, f0
-    fmv.d f19, f0
-    fmv.d f20, f0
-    fmv.d f21, f0
-    fmv.d f22, f0
-    fmv.d f23, f0
-    fmv.d f24, f0
-    fmv.d f25, f0
-    fmv.d f26, f0
-    fmv.d f27, f0
-    fmv.d f28, f0
-    fmv.d f29, f0
-    fmv.d f30, f0
-    fmv.d f31, f0
-
     // Set FS state to "Clean"
     csrrc x0, mstatus, t1
 
@@ -163,143 +98,4 @@ _fp_init:
     // Full fence, then jump to main
     fence
     call main
-
-// If main returns, we end up here
-.global _exit
-.align 4
-_exit:
-    // Restore the original context registers (sp last)
-    ld ra, 16(sp)
-    ld gp, 8(sp)
-    ld sp, 0(sp)
-    // Save the return value to scratch register 2 and wait forever.
-    slli t0, a0, 1
-    ori  t0, t0, 1
-    //la t1, __base_regs 
-    sw t0, 8(t1)     // regs.SCRATCH[2]
-    // Hand over to whatever called us, passing return
-    ret
-
-// This wraps the C trap handler to save the (integer-only) caller-save
-// registers and perform a proper machine-mode exception return.
-.section .text.init
-.align 4
-_trap_handler_wrap:
-    addi sp, sp, -128
-    sd ra, 120(sp)
-    sd t0, 112(sp)
-    sd t1, 104(sp)
-    sd t2, 96(sp)
-    sd a0, 88(sp)
-    sd a1, 80(sp)
-    sd a2, 72(sp)
-    sd a3, 64(sp)
-    sd a4, 56(sp)
-    sd a5, 48(sp)
-    sd a6, 40(sp)
-    sd a7, 32(sp)
-    sd t3, 24(sp)
-    sd t4, 16(sp)
-    sd t5, 8(sp)
-    sd t6, 0(sp)
-
-    csrr a0, mcause
-    jal exception_handler
-
-    ld ra, 120(sp)
-    ld t0, 112(sp)
-    ld t1, 104(sp)
-    ld t2, 96(sp)
-    ld a0, 88(sp)
-    ld a1, 80(sp)
-    ld a2, 72(sp)
-    ld a3, 64(sp)
-    ld a4, 56(sp)
-    ld a5, 48(sp)
-    ld a6, 40(sp)
-    ld a7, 32(sp)
-    ld t3, 24(sp)
-    ld t4, 16(sp)
-    ld t5, 8(sp)
-    ld t6, 0(sp)
-    addi sp, sp, 128
-    mret
-
-.global exception_handler
-.weak exception_handler
-.align 4
-exception_handler:
-    wfi
-    j exception_handler
-
-irq_handler:
-    j irq_handler
-
-uart0_irq_handler:
-    j uart0_irq_handler
-
-uart1_irq_handler:
-    j uart1_irq_handler
-
-uart_l0_irq_handler:
-    j uart_l0_irq_handler
-
-uart_l1_irq_handler:
-    j uart_l1_irq_handler
-
-spi0_irq_handler:
-    j spi0_irq_handler
-
-spi1_irq_handler:
-    j spi1_irq_handler
-
-spi_l0_irq_handler:
-    j spi_l0_irq_handler
-
-spi_l1_irq_handler:
-    j spi_l1_irq_handler
-
-gpio_irq_handler:
-    j gpio_irq_handler
-
-dma0_irq_handler:
-    j dma0_irq_handler
-
-dma1_irq_handler:
-    j dma1_irq_handler
-
-ethernet_irq_handler:
-    j ethernet_irq_handler
-
-i2s_rx_irq_handler:
-    j i2s_rx_irq_handler
-
-i2s_tx_irq_handler:
-    j i2s_tx_irq_handler
-
-i2c_irq_handler:
-    j i2c_irq_handler
-
-ps2_0_irq_handler:
-    j ps2_0_irq_handler
-
-ps2_1_irq_handler:
-    j ps2_1_irq_handler
-
-gpt_0_irq_handler:
-    j gpt_0_irq_handler
-
-gpt_1_irq_handler:
-    j gpt_1_irq_handler
-
-gpt_2_irq_handler:
-    j gpt_2_irq_handler
-
-gpt_3_irq_handler:
-    j gpt_3_irq_handler
-
-load_access_fault_handler:
-    j load_access_fault_handler
-
-store_access_fault_handler:
-    j store_access_fault_handler
+    
