@@ -4,7 +4,8 @@ CC      = $(PREF)gcc
 OBJCOPY = $(PREF)objcopy
 OBJDUMP = $(PREF)objdump
 
-CFLAGS := -g -nostartfiles -march=rv64imafdc -mabi=lp64d -Wall -O0
+CFLAGS := -g -nostartfiles -march=rv64imafdc -mabi=lp64d -Wall -O0 \
+	-fno-pic -no-pie # disable GOT usage (maybe)
 
 LINKER_SCRIPT := ../sdram.ld
 STARTUP_ASM   := ../startup.S

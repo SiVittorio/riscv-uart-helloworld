@@ -7,14 +7,14 @@
 void main(){
 
     // Reset and enable clock
-    SOFT_RST_REG |= 1U << 6;
-    CLK_GATE_REG |= 1U << 6;
+    // SOFT_RST_REG |= 1U << 6;
+    // CLK_GATE_REG |= 1U << 6;
 
-    for (uint8_t i = 0; i < 100; i++); // wait
+    // for (uint8_t i = 0; i < 100; i++); // wait
 
     // FIXME test without this settings
-    *(&UART_L0+8) = 0x07;  // 1b threshold
-    *(&UART_L0+16) = 0x20; // Autoflow
+    // *(&UART_L0+8) = 0x07;  // 1b threshold
+    // *(&UART_L0+16) = 0x20; // Autoflow
 
     const char * s = "Hello World!\r\n";
     while(*s) {

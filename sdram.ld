@@ -19,8 +19,11 @@ SECTIONS {
 
 
     .text : {
+    *(.text.init)
+    /*. = 0x200; Error here */
     *(.text._start)
     *(.text)
+    *(.text.*)
     } > SDRAM
 
     .misc ALIGN(32) : {
