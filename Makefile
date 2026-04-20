@@ -1,11 +1,10 @@
-PREF := riscv64-linux-gnu-
+PREF := riscv64-unknown-elf-
 
 CC      = $(PREF)gcc
 OBJCOPY = $(PREF)objcopy
 OBJDUMP = $(PREF)objdump
 
-CFLAGS := -g -nostartfiles -march=rv64imafdc -mabi=lp64d -Wall -O0 \
-	-fno-pic -no-pie # disable GOT usage (maybe)
+CFLAGS := -g -nostartfiles -march=rv64imafdc -mabi=lp64d -Wall -O0 -nostdlib
 
 LINKER_SCRIPT := ../sdram.ld
 STARTUP_ASM   := ../startup.S
