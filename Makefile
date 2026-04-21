@@ -1,4 +1,4 @@
-PREF := riscv64-linux-gnu-
+PREF := riscv64-unknown-elf-
 
 CC      = $(PREF)gcc
 OBJCOPY = $(PREF)objcopy
