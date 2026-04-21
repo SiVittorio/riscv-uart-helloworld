@@ -1,0 +1,70 @@
+
+#
+# Mnemonic Maps
+#
+mmap new  -reuse -name {Boolean as Logic} -radix %b -contents {{%c=FALSE -edgepriority 1 -shape low}
+{%c=TRUE -edgepriority 1 -shape high}}
+mmap new  -reuse -name {Example Map} -radix %x -contents {{%b=11???? -bgcolor orange -label REG:%x -linecolor yellow -shape bus}
+{%x=1F -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=2C -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=* -label %x -linecolor gray -shape bus}}
+
+array unset createdGroup
+array set createdGroup {}
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_cva6_wrapper.boot_addr_i[31:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.uart_l0_rx_i}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.uart_l0_tx_o}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.UART_16750.uart.iTSR[7:0]}]}
+	} ]]
+waveform format $id -radix %a
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.clk_i}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.ADDR_WIDTH}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.DATA_WIDTH}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.PADDR[31:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.PCLK}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.PENABLE}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.PRDATA[31:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.PREADY}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.PRESETn}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.PSEL}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.PSLVERR}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.PSTRB[3:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.PWDATA[31:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {msv3_top_tb.u_msv3_top.i_uart_l0_wrapper.uart_controller.apb_uart_ctrl.PWRITE}]}
+	} ]]
+
+waveform xview limits 60147887324fs 141578873239fs
