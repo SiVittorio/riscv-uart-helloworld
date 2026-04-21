@@ -20,7 +20,7 @@ SECTIONS {
 
     .text : {
     *(.text.init)
-    /*. = 0x200; Error here */
+    . = 0x200;
     *(.text._start)
     *(.text)
     *(.text.*)
